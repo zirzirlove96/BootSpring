@@ -1,8 +1,8 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
+<meta charset="UTF-8">
+<title>Users List</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,7 +10,6 @@
 <link rel="stylesheet"
 	href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 
-<title>Hello, world!</title>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -29,12 +28,30 @@
     </ul>
   </div>
 </nav>
-	<h1>Hello, world!</h1>
 
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
-	<script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<div class="container">
+  <h2>Basic Table</h2>
+  <p> </p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>아이디</th>
+        <th>비밀번호</th>
+        <th>이름</th>
+        <th>이메일</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#users}}
+      <tr>
+        <td>{{id}}</td>
+        <td>{{password}}</td>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+      </tr>
+      {{/users}}
+    </tbody>
+  </table>
+</div>
 </body>
 </html>

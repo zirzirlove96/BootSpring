@@ -1,4 +1,4 @@
-package kr.ac.jiyoung.cse;
+package kr.ac.jiyoung.cse.controller;
 
 
 import org.springframework.stereotype.Controller;

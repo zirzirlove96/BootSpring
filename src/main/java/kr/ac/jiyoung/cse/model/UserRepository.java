@@ -1,4 +1,4 @@
-package kr.ac.jiyoung.cse;
+package kr.ac.jiyoung.cse.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ac.jiyoung.cse.model.User;
@@ -52,6 +53,14 @@ public class UserController {
 		//form.html로 user라는 객체에 id값을 보내준다.
 		//Repository는 JPA를 선언했을 때 내부 함수로 있는 findById를 사용
 		return "/user/updateform";
+	}
+	
+	@PutMapping("/{id}")
+	public String updateUser(@PathVariable Long id, User newUser) {//update정보는 newUser에
+		User user = userRepository.findById(id).get();//데이터베이스에 있는 유저를 가져오기.
+		user.update(newUser);//User 객체에 update 메소드를 생성한다.
+		userRepository.save(user);
+		return "redirect:/users";
 	}
 
 }

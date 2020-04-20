@@ -25,5 +25,11 @@ public class User {
 	private String password;
 	private String name;
 	private String email;
+	
+	public void update(User newUser) {
+		this.password = newUser.password;
+		this.name = newUser.name;
+		this.email = newUser.email;
+	}//수정한 정보가 User객체에 들어가게 된다.
 
 }

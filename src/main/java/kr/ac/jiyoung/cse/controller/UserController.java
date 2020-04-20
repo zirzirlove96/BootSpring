@@ -1,6 +1,8 @@
 package kr.ac.jiyoung.cse.controller;
 
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +23,37 @@ public class UserController {
 	@Autowired(required=true)
 	private UserRepository userRepository;//DAO를 담당하는 repository를 가져와 쓴다.
 	
+	@GetMapping("/index")
+	public String indexpage() {
+		return "/user/index";
+	}
+	
 	@GetMapping("/form")
 	public String form() {
 		return "/user/form";
+	}
+	
+	@GetMapping("/loginForm")//login.html로 가는 메소드
+	public String login() {
+		return "/user/login";
+	}
+	
+	@PostMapping("/login")
+	public String loginForm(String userId, String password, HttpSession session) {
+		User user = userRepository.findByUserId(userId);//데이터베이스에 userId로 사용자를 찾을 수 있는 객체를 생성
+		
+		if(user == null) {
+			return "redirect:/users/loginForm";
+		}//user객체에 userId가 없는 경우.
+		
+		if(!password.equals(user.getPassword())) {
+			return "redirect:/users/loginForm";
+		}//password가 같지 않는경우.
+		
+		System.out.println(user);
+		session.setAttribute("user", user);//로그인 한 정보를 user라는 이름에 저장하자.
+		
+		return "redirect:/users/index";
 	}
 	
 	@PostMapping("")//POST일때 /user url과 GET일 때 의 url은 다른 메소드를 가리키기 때문에

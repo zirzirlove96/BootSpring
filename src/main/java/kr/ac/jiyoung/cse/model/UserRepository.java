@@ -6,5 +6,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	//JpaRepository를 연결하고 User 테이블과 id값을 연결함으로써 SQL문을 던져 CRUD를 할 수 있다.
 	//데이터베이스에 데이터를 추가, 삭제, 수정 기능을 할 수 있다.
 	//기본적으로 save,delete를 JpaRepository가 가지고 있다.
+	
+	User findByUserId(String userId);
+	//findBy하고 조회하고 싶은 속성이름을 주면 그 필드를 기반으로 조회를 할 수 있다.
 
 }

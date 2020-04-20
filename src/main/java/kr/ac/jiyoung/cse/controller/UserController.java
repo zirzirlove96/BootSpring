@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +19,11 @@ public class UserController {
 	
 	@Autowired(required=true)
 	private UserRepository userRepository;//DAO를 담당하는 repository를 가져와 쓴다.
+	
+	@GetMapping("/form")
+	public String form() {
+		return "/user/form";
+	}
 	
 	@PostMapping("")//POST일때 /user url과 GET일 때 의 url은 다른 메소드를 가리키기 때문에
 	//같은 url을 사용해도 된다.
@@ -37,6 +43,15 @@ public class UserController {
 		model.addAttribute("users", userRepository.findAll());//JpaRepository를 이용하여 
 		//users에 정보를 담아 list.html로 보낸다.
 		return "/user/list";
+	}
+	
+	@GetMapping("/{id}/form")//list.html에서 보낸 id값의 사용자 정보를 나타내는 페이지로 이동하게 해준다.
+	public String updateForm(@PathVariable Long id, Model model) {
+		//PathVaraible은 url에 나타낸 값을 가져와 준다.
+		model.addAttribute("user", userRepository.findById(id).get());
+		//form.html로 user라는 객체에 id값을 보내준다.
+		//Repository는 JPA를 선언했을 때 내부 함수로 있는 findById를 사용
+		return "/user/updateform";
 	}
 
 }

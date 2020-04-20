@@ -51,7 +51,18 @@ public class UserController {
 		}//password가 같지 않는경우.
 		
 		System.out.println(user);
-		session.setAttribute("user", user);//로그인 한 정보를 user라는 이름에 저장하자.
+		session.setAttribute("userLogin", user);//로그인 한 정보를 user라는 이름에 저장하자.
+		
+		return "redirect:/users/index";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		
+		session.removeAttribute("userLogin");//session에 저장된 것을 지워준다.
+		//세션에 저장을 하면 여러 페이지를 이동하더라도 저장된 상태로 유지된다.
+		//그렇기 때문에 session에 담겨있는 유저 데이터를 제거해야 한다.
+		//login메소드의 set에 해당하는 key값과 같은 값이 들어가야만 한다.
 		
 		return "redirect:/users/index";
 	}

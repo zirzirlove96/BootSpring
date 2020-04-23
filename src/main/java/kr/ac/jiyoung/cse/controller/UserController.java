@@ -88,7 +88,19 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/form")//list.html에서 보낸 id값의 사용자 정보를 나타내는 페이지로 이동하게 해준다.
-	public String updateForm(@PathVariable Long id, Model model) {
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+		
+		Object sessionUser = session.getAttribute("userLogin");
+		if(sessionUser == null) {
+			return "redirect:/users/loginForm";
+		}
+		
+		User sessionedUser = (User)sessionUser;
+		if(!id.equals(sessionedUser.getId())) {
+			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+			
+		}
+		
 		//PathVaraible은 url에 나타낸 값을 가져와 준다.
 		model.addAttribute("user", userRepository.findById(id).get());
 		//form.html로 user라는 객체에 id값을 보내준다.
@@ -97,7 +109,19 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public String updateUser(@PathVariable Long id, User newUser) {//update정보는 newUser에
+	public String updateUser(@PathVariable Long id, User newUser,
+			HttpSession session) {//update정보는 newUser에
+		
+		Object sessionUser = session.getAttribute("userLogin");
+		if(sessionUser == null) {
+			return "redirect:/users/loginForm";
+		}
+		
+		User sessionedUser = (User)sessionUser;
+		if(!id.equals(sessionedUser.getId())) {
+			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+		}
+		
 		User user = userRepository.findById(id).get();//데이터베이스에 있는 유저를 가져오기.
 		user.update(newUser);//User 객체에 update 메소드를 생성한다.
 		userRepository.save(user);

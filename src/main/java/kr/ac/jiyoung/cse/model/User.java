@@ -20,7 +20,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//Auto_increment
 	private Long id;
 	
-	@Column(nullable=false, length=20)//userId에 null값은 들어 가지 못하고 길이는 20이하여야 한다.
+	@Column(nullable=false, length=20, unique=true)//userId에 null값은 들어 가지 못하고 길이는 20이하여야 한다.
 	private String userId;
 	private String password;
 	private String name;

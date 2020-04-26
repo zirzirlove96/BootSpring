@@ -31,5 +31,19 @@ public class User {
 		this.name = newUser.name;
 		this.email = newUser.email;
 	}//수정한 정보가 User객체에 들어가게 된다.
+	
+	public boolean mathPassword(String newPassword) {
+		if(newPassword==null) {
+			return false;
+		}
+		return newPassword.equals(password);
+	}
+	
+	public boolean mathId(Long newId) {
+		if(newId==null) {
+			return false;
+		}
+		return newId.equals(id);
+	}
 
 }

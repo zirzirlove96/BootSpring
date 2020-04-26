@@ -46,12 +46,12 @@ public class UserController {
 			return "redirect:/users/loginForm";
 		}//user객체에 userId가 없는 경우.
 		
-		if(!password.equals(user.getPassword())) {
+		if(!user.mathPassword(password)) {
 			return "redirect:/users/loginForm";
 		}//password가 같지 않는경우.
 		
 		System.out.println(user);
-		session.setAttribute("userLogin", user);//로그인 한 정보를 user라는 이름에 저장하자.
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);//로그인 한 정보를 user라는 이름에 저장하자.
 		
 		return "redirect:/users/index";
 	}
@@ -59,7 +59,7 @@ public class UserController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		
-		session.removeAttribute("userLogin");//session에 저장된 것을 지워준다.
+		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);//session에 저장된 것을 지워준다.
 		//세션에 저장을 하면 여러 페이지를 이동하더라도 저장된 상태로 유지된다.
 		//그렇기 때문에 session에 담겨있는 유저 데이터를 제거해야 한다.
 		//login메소드의 set에 해당하는 key값과 같은 값이 들어가야만 한다.
@@ -90,13 +90,13 @@ public class UserController {
 	@GetMapping("/{id}/form")//list.html에서 보낸 id값의 사용자 정보를 나타내는 페이지로 이동하게 해준다.
 	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 		
-		Object sessionUser = session.getAttribute("userLogin");
-		if(sessionUser == null) {
+		//Object sessionUser = session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+		if(HttpSessionUtils.isLoginUser(session)==false) {
 			return "redirect:/users/loginForm";
 		}
 		
-		User sessionedUser = (User)sessionUser;
-		if(!id.equals(sessionedUser.getId())) {
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if(!sessionedUser.mathId(id)) {
 			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
 			
 		}
@@ -112,13 +112,13 @@ public class UserController {
 	public String updateUser(@PathVariable Long id, User newUser,
 			HttpSession session) {//update정보는 newUser에
 		
-		Object sessionUser = session.getAttribute("userLogin");
-		if(sessionUser == null) {
+		//Object sessionUser = session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+		if(HttpSessionUtils.isLoginUser(session)==false) {
 			return "redirect:/users/loginForm";
 		}
 		
-		User sessionedUser = (User)sessionUser;
-		if(!id.equals(sessionedUser.getId())) {
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if(!sessionedUser.mathId(id)) {
 			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
 		}
 		

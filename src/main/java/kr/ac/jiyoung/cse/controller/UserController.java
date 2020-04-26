@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kr.ac.jiyoung.cse.model.QuestionRepository;
 import kr.ac.jiyoung.cse.model.User;
 import kr.ac.jiyoung.cse.model.UserRepository;
 
@@ -20,11 +21,16 @@ import kr.ac.jiyoung.cse.model.UserRepository;
 @RequestMapping("/users")
 public class UserController {
 	
+	@Autowired
+	private QuestionRepository questionRepository;
+	
 	@Autowired(required=true)
 	private UserRepository userRepository;//DAO를 담당하는 repository를 가져와 쓴다.
 	
 	@GetMapping("/index")
-	public String indexpage() {
+	public String indexpage(Model model) {
+		
+		model.addAttribute("question", questionRepository.findAll());
 		return "/user/index";
 	}
 	

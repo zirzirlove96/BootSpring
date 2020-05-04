@@ -4,7 +4,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -40,14 +42,23 @@ public class QuestionController {
 		}
 		
 		User user = HttpSessionUtils.getUserFromSession(session);//글쓴이 즉 로그인한 유저를 가져온다.
-		
-		Question newQuestion = new Question(user.getId(), user.getUserId(), title, contents);
+		Question newQuestion = new Question(user, title, contents);
 		//생성자에 값을 것을 Question에 보낸다.
 		
 		questionRepository.save(newQuestion);
 		
 		
 		return "redirect:/users/index";//성공했을 때 메인화면으로 가게 한다.
+	}
+	
+	@GetMapping("/{id}")
+	public String showQuestions(@PathVariable Long id, Model model) {
+		Question question = questionRepository.findById(id).get();
+		//원하는 글을 가져오게 한다.
+		
+		model.addAttribute("question", question);
+		
+		return "/qna/show";
 	}
 
 }

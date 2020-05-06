@@ -63,17 +63,37 @@ public class QuestionController {
 	}
 
 	@GetMapping("/{id}/form")
-	public String updateQuestions(@PathVariable Long id, Model model) {
+	public String updateQuestions(@PathVariable Long id, Model model, HttpSession session) {
 		
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}//로그인이 되어 있지 않은 경우 로그인 페이지로 넘어간다.
+		
+		//로그인은 되어 있지만 글을 쓴 이와 로그인한 정보가 다를 경우
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		Question questionLogin = questionRepository.findById(id).get();
+		if(!questionLogin.isSameUser(sessionedUser)) {
+			return "redirect:/users/loginForm";
+		}
+				
 		Question question = questionRepository.findById(id).get();
-		
 		model.addAttribute("question", question);
 		
 		return "/qna/updateQuestion";
 	}
 	
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, String title, String contents) {
+	public String update(@PathVariable Long id, String title, String contents, HttpSession session) {
+		
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}
+		
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		Question questionLogin = questionRepository.findById(id).get();
+		if(!questionLogin.isSameUser(loginUser)) {
+			return "redirect:/users/loginForm";
+		}
 		
 		Question question = questionRepository.findById(id).get();
 		question.update(title, contents);//객체에 수정한 내용을 저장
@@ -84,7 +104,17 @@ public class QuestionController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, HttpSession session) {
+		
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}
+		
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		Question questionLogin = questionRepository.findById(id).get();
+		if(!questionLogin.isSameUser(loginUser)) {
+			return "redirect:/users/loginForm";
+		}
 		
 		questionRepository.deleteById(id);
 		return "redirect:/users/index";

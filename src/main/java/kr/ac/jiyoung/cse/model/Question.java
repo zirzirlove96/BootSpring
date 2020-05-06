@@ -2,6 +2,7 @@ package kr.ac.jiyoung.cse.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -10,8 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +32,10 @@ public class Question {
 	@JoinColumn(foreignKey = @ForeignKey(name="fk_question_writer"))
 	private User writer;
 	//원래의 String writer에서 User객체를 사용하여 객체간의 관계를 나타내 보자.
+	
+	@OneToMany(mappedBy="question")
+	@OrderBy("id ASC")
+	private List<Answer> answersList;
 	
 	private String title;
 	
@@ -52,10 +58,23 @@ public class Question {
 		
 		return createDate.format(DateTimeFormatter.ofPattern("yyy.MM.dd HH:mm:ss"));
 	}
+	
+	public int getWriterSize() {
+		
+		return answersList.size();
+	}
 
 	public void update(String title, String contents) {
 		// TODO Auto-generated method stub
 		this.title = title;
 		this.contents = contents;
 	}
+
+	public boolean isSameUser(User LoginUser) {
+		// TODO Auto-generated method stub
+		
+		return this.writer.equals(LoginUser);
+	}
+
+	
 }

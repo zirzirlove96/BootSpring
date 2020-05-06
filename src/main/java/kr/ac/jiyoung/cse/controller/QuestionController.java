@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kr.ac.jiyoung.cse.exception.Result;
 import kr.ac.jiyoung.cse.model.Question;
 import kr.ac.jiyoung.cse.model.QuestionRepository;
 import kr.ac.jiyoung.cse.model.User;
@@ -62,6 +63,18 @@ public class QuestionController {
 		return "/qna/show";
 	}
 	
+	private Result Valid(HttpSession session, Question question) {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return Result.failed("로그인이 필요합니다");
+		}
+		User loginuser = HttpSessionUtils.getUserFromSession(session);
+		if(!question.isSameUser(loginuser)) {
+			return Result.failed("자신이 쓴 글만 수정, 삭제 가능합니다");
+		}
+		
+		return Result.success();
+	}
+	
 	private boolean hasPermission(HttpSession session, Question question) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new IllegalStateException("로그인이 필요합니다");
@@ -77,49 +90,47 @@ public class QuestionController {
 	@GetMapping("/{id}/form")
 	public String updateQuestions(@PathVariable Long id, Model model, HttpSession session) {
 		
-		try {
-			Question question = questionRepository.findById(id).get();
-			hasPermission(session, question);
-			model.addAttribute("question", question);
+		Question question = questionRepository.findById(id).get();
+		Result result = Valid(session, question);
+		if(!result.isValid()) {
+			model.addAttribute("errorMsg", result.getErrorMsg());
 			return "/qna/updateform";
-		}catch(IllegalStateException e) {
-			model.addAttribute("errorMsg", e.getMessage());
-			return "/user/login";
 		}
+		
+		model.addAttribute("question", question);
+		return "/qna/updateform";
 	}
 	
 	@PutMapping("/{id}")
 	public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
 	
-		try {
-			Question question = questionRepository.findById(id).get();
-			hasPermission(session, question);
-			question.update(title, contents);//객체에 수정한 내용을 저장
-			questionRepository.save(question);//데이터베이스에 수정된 객체를 저장
-			
-			return String.format("redirect:/questions/%d", id);
-			//String.format은 지정된 위치에 값을 대입해서 문자열을 만들어준다.
-		}catch(IllegalStateException e) {
-			model.addAttribute("errorMsg", e.getMessage());
+		Question question = questionRepository.findById(id).get();
+		Result result = Valid(session, question);
+		if(!result.isValid()) {
+			model.addAttribute("errorMsg", result.getErrorMsg());
 			return "/user/login";
 		}
+		
+		question.update(title, contents);//객체에 수정한 내용을 저장
+		questionRepository.save(question);//데이터베이스에 수정된 객체를 저장
+		
+		return String.format("redirect:/questions/%d", id);
+		//String.format은 지정된 위치에 값을 대입해서 문자열을 만들어준다.
 	
 	}
 	
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, Model model, HttpSession session) {
 		
-		try {
-			Question question = questionRepository.findById(id).get();
-			hasPermission(session, question);
-			questionRepository.deleteById(id);
-			return "redirect:/users/index";
-		}catch(IllegalStateException e) {
-			model.addAttribute("errorMsg", e.getMessage());
+		Question question = questionRepository.findById(id).get();
+		Result result = Valid(session, question);
+		if(!result.isValid()) {
+			model.addAttribute("errorMsg", result.getErrorMsg());
 			return "/user/login";
 		}
 		
-	
+		questionRepository.deleteById(id);
+		return "redirect:/users/index";
 	}
 
 

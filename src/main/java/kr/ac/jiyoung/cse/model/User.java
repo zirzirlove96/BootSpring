@@ -2,32 +2,44 @@ package kr.ac.jiyoung.cse.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Setter
-@Getter
-@ToString
+
 @Entity//데이터베이스와 연결되는 것을 인식해준다
 public class User {
 	
+	
+
 	@Id//primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//Auto_increment
+	@JsonProperty
 	private Long id;
 	
 	@Column(nullable=false, length=20, unique=true)//userId에 null값은 들어 가지 못하고 길이는 20이하여야 한다.
+	@JsonProperty
 	private String userId;
+
+	@JsonIgnore
 	private String password;
+	
+	@JsonProperty
 	private String name;
+	
+	@JsonProperty
 	private String email;
+	
+	public User() {}
 	
 	public void update(User newUser) {
 		this.password = newUser.password;
@@ -47,6 +59,22 @@ public class User {
 			return false;
 		}
 		return newId.equals(id);
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
 	}
 
 	@Override

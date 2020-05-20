@@ -75,7 +75,7 @@ public class UserController {
 	
 	@PostMapping("")//POST일때 /user url과 GET일 때 의 url은 다른 메소드를 가리키기 때문에
 	//같은 url을 사용해도 된다.
-	public String create(User user,Model model) {
+	public String create(User user, Model model) {
 		model.addAttribute("id", user.getId());
 		model.addAttribute("password", user.getPassword());
 		model.addAttribute("name", user.getName());

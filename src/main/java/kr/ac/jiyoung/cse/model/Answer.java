@@ -12,34 +12,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
 public class Answer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty
 	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name="fk_answer_writer"))
+	@JsonProperty
 	private User writer;
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name="fk_answer_to_question"))
+	@JsonProperty
 	private Question question;
 	
 	@Lob //텍스트의 길이를 255자를 넘겨서 설정
+	@JsonProperty
 	private String contents;
 	
 	private LocalDateTime createDate;
+	
+	public Answer() {}
 	
 	public Answer(User writer, Question question, String contents) {
 		this.writer = writer;

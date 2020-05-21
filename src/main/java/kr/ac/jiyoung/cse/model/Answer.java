@@ -86,4 +86,9 @@ public class Answer {
 		return true;
 	}
 
+	public boolean isSameWriter(User loginuser) {
+		
+		return loginuser.equals(this.writer);
+	}//글 쓴이와 로그인 한 사람이 동일한지 확인해 준다.
+
 }

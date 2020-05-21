@@ -16,11 +16,6 @@ import javax.persistence.OrderBy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
 public class Question {
 
@@ -47,6 +42,9 @@ public class Question {
 
 	private LocalDateTime createDate;
 	
+	@JsonProperty
+	private Integer counfOfAnswer = 0;
+	
 	public Question() {}
 
 	public Question(User writer, String title, String contents) {
@@ -65,10 +63,10 @@ public class Question {
 		return createDate.format(DateTimeFormatter.ofPattern("yyy.MM.dd HH:mm:ss"));
 	}
 
-	public int getWriterSize() {
+	/*public int getWriterSize() {
 
 		return answersList.size();
-	}
+	}*/
 
 	public void update(String title, String contents) {
 		// TODO Auto-generated method stub
@@ -80,6 +78,15 @@ public class Question {
 		// TODO Auto-generated method stub
 
 		return this.writer.equals(LoginUser);
+	}
+
+	public void addAnswer() {
+		// TODO Auto-generated method stub
+		this.counfOfAnswer+=1;
+	}
+	
+	public void deleteAnswer() {
+		this.counfOfAnswer-=1;
 	}
 
 }

@@ -33,6 +33,7 @@ public class AnswerController {
 		User loginuser = HttpSessionUtils.getUserFromSession(session);
 		Question question = questionRepository.findById(questionId).get();
 		Answer answer = new Answer(loginuser, question, contents);
+		question.addAnswer();
 		return answerRepository.save(answer);//데이터베이스에 저장된 값을 리턴
 		
 	}
@@ -50,7 +51,12 @@ public class AnswerController {
 			return Result.failed("자신의 글만 삭제할 수 있습니다."); 
 		}
 		
+		Question question = questionRepository.findById(questionId).get();
+		question.deleteAnswer();
+		questionRepository.save(question);
+
 		answerRepository.deleteById(answerId);
+		
 		return Result.success();
 	}
 	

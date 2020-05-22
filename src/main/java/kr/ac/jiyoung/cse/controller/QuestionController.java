@@ -94,11 +94,11 @@ public class QuestionController {
 		Result result = Valid(session, question);
 		if(!result.isValid()) {
 			model.addAttribute("errorMsg", result.getErrorMsg());
-			return "/qna/updateform";
+			return "/user/login";
 		}
 		
 		model.addAttribute("question", question);
-		return "/qna/updateform";
+		return "/qna/updateQuestion";
 	}
 	
 	@PutMapping("/{id}")

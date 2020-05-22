@@ -17,12 +17,7 @@ import javax.persistence.OrderBy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class Question {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty
-	private Long id;
+public class Question extends AbstractEntity{
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -39,8 +34,6 @@ public class Question {
 
 	@JsonProperty
 	private String contents;
-
-	private LocalDateTime createDate;
 	
 	@JsonProperty
 	private Integer counfOfAnswer = 0;
@@ -51,17 +44,8 @@ public class Question {
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
-		this.createDate = LocalDateTime.now();// 데이터베이스에 시간을 넣어주기 위해
 	}
 
-	// index.jsp에서 시간을 나타내기 위해 사용하는 메서드
-	public String getFormattedCreateDate() {
-		if (createDate == null) {
-			return "";
-		}
-
-		return createDate.format(DateTimeFormatter.ofPattern("yyy.MM.dd HH:mm:ss"));
-	}
 
 	/*public int getWriterSize() {
 

@@ -1,11 +1,11 @@
 # BootSpring
 
-## youtube에 올라와 있는 Spring-Boot, JPA로 질문/답변 게시판 구현 과정 을 따라하여 spring boot에 대한 개념을 잡고 이해해 보았습니다.
+### youtube에 올라와 있는 Spring-Boot, JPA로 질문/답변 게시판 구현 과정 을 따라하여 spring boot에 대한 개념을 잡고 이해해 보았습니다.
 
-* AWS 혹은 원격 서버에 배포하는 부분은 제외, Eclipse를 이용
+#### AWS 혹은 원격 서버에 배포하는 부분은 제외, Eclipse를 이용
 
 Lesson 1. (완료) <4/7> 
-  spring boot 로컬 개발 환경 세팅, HTML 페이지 개발, 소스를 github에 배포
+   spring boot 로컬 개발 환경 세팅, HTML 페이지 개발, 소스를 github에 배포 
 
 Lesson 2. (완료) <4/13>
  mustache 활용한 동적인 html과 MVC 설명, 회원가입 기능 구현, 사용자 목록 기능 구현
